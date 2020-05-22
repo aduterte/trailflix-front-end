@@ -1,4 +1,5 @@
 import React from "react"
+import { Link } from "react-router-dom"
 import '../App.css'
 
 export default function Nav () {
@@ -8,9 +9,9 @@ export default function Nav () {
                 LOGO HERE
             </div>
             <div id="right-nav">
-                <div>Button 1</div>
-                <div>Button 2</div>
-                <div>Button 3</div>
+                <button>Search</button>
+                <button><Link to="/movies">Movies</Link></button>
+                <button><Link to="/login">Login</Link></button>
             </div>
         </div>
     )

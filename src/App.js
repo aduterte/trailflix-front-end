@@ -6,7 +6,8 @@ import './App.css';
 import {
   BrowserRouter as Router,
   Switch,
-  Route
+  Route,
+  Redirect
 } from "react-router-dom"
 
 class App extends React.Component {
@@ -14,25 +15,29 @@ class App extends React.Component {
   state = {
     movies: [],
     loggedIn: false,
-    user: null
+    user: null,
+    randomMovie: {}
   }
   componentDidMount(){
     fetch('http://localhost:3000/movies')
     .then(resp => resp.json())
-    .then(data => this.setState({movies: data}))
+    .then(data => {
+      const random = [Math.floor(Math.random() * data.length)],
+            randomMovie = data[random]
+      this.setState({randomMovie: randomMovie})
+      this.setState({movies: data})
+    })
     
   }
 
   handleLogin = (user) => {
-    // console.log(user)
+    console.log(user)
     this.setState({user: user})
+    console.log(this.state.user)
   }
 
   render(){
-    // if(this.state.user !== null){
-    //   console.log(this.state.user)
-      
-    // }
+    
     return (
       <Router>
       <div className="App">
@@ -40,14 +45,17 @@ class App extends React.Component {
         <Switch>
           
           <Route path="/movies">
-            <MovieContainer movies={this.state.movies}/>
+          {this.state.movies.length > 0 ? <MovieContainer movies={this.state.movies} rndMov={this.state.randomMovie}/> : null}
           </Route>
-          <Route path="/">
-            {!this.state.user ? 
-            <LoginContainer handleLogin={this.handleLogin} />:
-            <MovieContainer movies={this.state.movies}/>
-            }
+          {/* <Route exact path="/" render={() => (
+            this.state.user ? <Redirect to="/movies"/> : <Redirect to="/login" />
+          ) } /> */}
+          <Route exact path="/">
+            {this.state.user ? <Redirect to="/movies"/> : <Redirect to="/login" />}
           </Route>
+          <Route path="/login" render={() => (
+            this.state.user ? <Redirect to="/movies"/> : <LoginContainer handleLogin={this.handleLogin}/>  
+            ) } />
         </Switch>
       </div>
       </Router>
