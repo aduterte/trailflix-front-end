@@ -9,6 +9,8 @@ import {
   Route,
   Redirect
 } from "react-router-dom"
+import Profile from './components/Profile'
+// api key: b94d0b3b408ccf74d9f49bb39a64a13b 
 
 class App extends React.Component {
 
@@ -16,7 +18,8 @@ class App extends React.Component {
     movies: [],
     loggedIn: false,
     user: null,
-    randomMovie: {}
+    randomMovie: {},
+    userFavorites: []
   }
   componentDidMount(){
     fetch('http://localhost:3000/movies')
@@ -28,24 +31,79 @@ class App extends React.Component {
       this.setState({movies: data})
     })
     
+    
   }
 
   handleLogin = (user) => {
     console.log(user)
-    this.setState({user: user})
-    console.log(this.state.user)
+    this.setState({
+      user: user,
+      userFavorites: user.movies
+    })
   }
+
+  func = () => {
+    console.log("Movie in Profile has been clicked")
+  }
+
+  addFavorite = (movie) => {
+
+    const obj = {
+      movie_id: movie.id,
+      user_id: this.state.user.id
+    }
+    
+    fetch("http://localhost:3000/favorites", {
+      method: "POST",
+      headers: {"Content-Type": 'application/json'},
+      body: JSON.stringify(obj)
+    }).then(resp => resp.json())
+    .then(movie => {
+      this.setState({
+        userFavorites: [...this.state.userFavorites, movie]
+      })
+    } )
+    // if movie doesn't exist in user.favorite, do fetch post. else do fetch delete
+  }
+
+  handleFavorite = (movie) => {
+    if (this.state.userFavorites.find(mov => mov.title === movie.title)){
+        this.removeFavorite(movie)
+    } else {
+        this.addFavorite(movie)
+    }
+    //if is in userfavore use removeFavorite helper
+    //else if is NOT in userFav use add Favorite helper
+    // .filter(mov => mov.title === movie.title).length > 0
+  }
+  
+  removeFavorite = (movie) => {
+    const obj = {
+      movie_id: movie.id,
+      user_id: this.state.user.id
+    }
+    fetch(`http://localhost:3000/favorites`, {
+      method: "DELETE",
+      headers: {"Content-Type": 'application/json'},
+      body: JSON.stringify(obj)
+    }).then(resp => resp.json())
+    .then(data => {
+      const newArr = this.state.userFavorites.filter(mov => mov.title !== movie.title)
+      this.setState({userFavorites: newArr})
+    })
+  }
+
 
   render(){
     
     return (
       <Router>
       <div className="App">
-        <Nav />
+        <Nav user={this.state.user}/>
         <Switch>
           
           <Route path="/movies">
-          {this.state.movies.length > 0 ? <MovieContainer movies={this.state.movies} rndMov={this.state.randomMovie}/> : null}
+          {this.state.user ? <MovieContainer userFavorites={this.state.userFavorites} action={this.handleFavorite} movies={this.state.movies} rndMov={this.state.randomMovie} /> : <Redirect to="/login" />}
           </Route>
           {/* <Route exact path="/" render={() => (
             this.state.user ? <Redirect to="/movies"/> : <Redirect to="/login" />
@@ -54,8 +112,11 @@ class App extends React.Component {
             {this.state.user ? <Redirect to="/movies"/> : <Redirect to="/login" />}
           </Route>
           <Route path="/login" render={() => (
-            this.state.user ? <Redirect to="/movies"/> : <LoginContainer handleLogin={this.handleLogin}/>  
+            this.state.user ? <Redirect to="/profile"/> : <LoginContainer handleLogin={this.handleLogin}/>  
             ) } />
+          <Route path='/profile'>
+            {this.state.user ? <Profile user={this.state.user} favorites={this.state.userFavorites} removeFavorite={this.removeFavorite}/> : <Redirect to="/login" /> }
+          </Route>
         </Switch>
       </div>
       </Router>

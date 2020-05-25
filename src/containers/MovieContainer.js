@@ -9,16 +9,17 @@ export default function MovieContainer(props){
 
     
     function handleMovieClick(movie) {
+        document.getElementById("movie-container").scrollTop = 0
         setCurrentMovie(movie)   
     }
-   
+
     return (
         <div id="movie-container">
             <div>
-                <HeroMovie movie={currentMovie}/>
+                <HeroMovie userFavorites={props.userFavorites} movie={currentMovie} action={props.action}/>
             </div>
             <div className="flex-grid">
-                {props.movies.map(movie => <Movie key={movie.id} movie={movie} handleMovieClick={handleMovieClick}/>)}
+                {props.movies.map(movie => <Movie title="movie-container" key={movie.id} movie={movie} removeFavorite={props.removeFavorite} action={handleMovieClick}/>)}
             </div>
         </div>
     )
