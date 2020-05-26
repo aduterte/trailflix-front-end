@@ -10,6 +10,8 @@ import {
   Redirect
 } from "react-router-dom"
 import Profile from './components/Profile'
+import ShowMovieContainer from './containers/ShowMovieContainer';
+import SearchContainer from './containers/SearchContainer';
 // api key: b94d0b3b408ccf74d9f49bb39a64a13b 
 
 class App extends React.Component {
@@ -102,7 +104,7 @@ class App extends React.Component {
         <Nav user={this.state.user}/>
         <Switch>
           
-          <Route path="/movies">
+          <Route exact path="/movies">
           {this.state.user ? <MovieContainer userFavorites={this.state.userFavorites} action={this.handleFavorite} movies={this.state.movies} rndMov={this.state.randomMovie} /> : <Redirect to="/login" />}
           </Route>
           {/* <Route exact path="/" render={() => (
@@ -117,6 +119,18 @@ class App extends React.Component {
           <Route path='/profile'>
             {this.state.user ? <Profile user={this.state.user} favorites={this.state.userFavorites} removeFavorite={this.removeFavorite}/> : <Redirect to="/login" /> }
           </Route>
+          <Route exact path="/movies/:id" render={
+            (routerProps) => {
+              let id = routerProps.match.params.id
+              let movie = this.state.movies.find(movie => movie.id == id)
+              return this.state.user ? <ShowMovieContainer userFavorites={this.state.userFavorites} action={this.handleFavorite} movies={this.state.movies} movie={movie}/> :
+              <Redirect to="/login" />
+            }
+          }
+          />
+           <Route path='/search'>
+            <SearchContainer ourDb={this.state.movies}/> 
+           </Route>
         </Switch>
       </div>
       </Router>

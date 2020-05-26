@@ -1,27 +1,26 @@
 import React, {useState} from "react"
 import Movie from "../components/Movie"
 import HeroMovie from "../components/HeroMovie"
-import {Link, Redirect} from "react-router-dom"
 
 
-export default function MovieContainer(props){
+export default function ShowMovieContainer(props){
     
-    const [currentMovie, setCurrentMovie] = useState(props.rndMov)
+   
 
     
     function handleMovieClick(movie) {
         document.getElementById("movie-container").scrollTop = 0
-        return <Redirect to={`/movies/${movie.id}`}/>  
+        console.log("i was clicked")
     }
 
     return (
         <div id="movie-container">
             <div>
-                <HeroMovie userFavorites={props.userFavorites} movie={currentMovie} action={props.action}/>
+                <HeroMovie userFavorites={props.userFavorites} movie={props.movie} action={props.action}/>
             </div>
-            <div className="flex-grid">
+            {/* <div className="flex-grid">
                 {props.movies.map(movie => <Movie title="movie-container" key={movie.id} movie={movie} removeFavorite={props.removeFavorite} action={handleMovieClick}/>)}
-            </div>
+            </div> */}
         </div>
     )
 }
