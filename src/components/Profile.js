@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import Movie from "./Movie"
-import { withRouter } from 'react-router-dom'
+// import { withRouter } from 'react-router-dom'
 class Profile extends Component {
 
     tempfunc = () => {
@@ -8,13 +8,14 @@ class Profile extends Component {
         console.log("future function")
     }
     render(){
-        const {name, movies} = this.props.user
+        const {name} = this.props.user
         return (
             <div id="movie-container">
-        <div style={{color: "white"}}><h1>Username: {name}</h1>
+                <div style={{color: "white"}} className="movies-header"><h1>Welcome {name},</h1></div>
+            <div style={{color: "white"}} className="movies-header"><h1>My Favorites</h1>
             </div>
             <div className="flex-grid"> 
-            {this.props.favorites.map(movie => <Movie title="profile" key={movie.id} movie={movie} action={this.tempfunc} removeFavorite={this.props.removeFavorite}/>)}
+            {this.props.favorites.map(movie => <Movie title="profile-container" favs={this.props.favorites} key={movie.id} movie={movie} handleFavorite={this.props.action}/>)}
         </div>
         
         </div>

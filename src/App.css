@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue");
 
 .App {
   height: 100%;
@@ -5,6 +6,10 @@
 }
 
 .App::-webkit-scrollbar {
+  display: none;
+}
+
+html::-webkit-scrollbar {
   display: none;
 }
 
@@ -21,6 +26,7 @@
 #right-nav {
   display: flex;
   justify-content: space-between;
+  margin-right: 20px;
 }
 
 .featured-movie {
@@ -95,16 +101,23 @@
   margin: 10px 10px 40px 10px;
   color: white;
   padding: 0px;
+  background-repeat: no-repeat;
 }
 
 #movie-container {
   height: 95.8%;
-  background-color: black;
+  background-color: rgb(16, 16, 16);
   overflow: auto;
 }
 
 #movie-container::-webkit-scrollbar {
-  display: none;
+ 
+  background-color: rgb(117, 40, 40);
+}
+
+#movie-container::-webkit-scrollbar-thumb {
+  
+  background: rgb(69, 31, 31);
 }
 
 .rating-logo{
@@ -140,4 +153,244 @@
   display:flex;
   justify-content: center;
   align-items: center;
+}
+
+.trailer-button {
+  height:75px;
+  width:175px;
+  background-image: linear-gradient(rgba(0, 0, 0, 0),rgba(0, 0, 0, 0.831));
+  font-size: 25px;
+  font-family: 'Bebas Neue';
+  cursor: pointer;
+}
+
+.trailer-button-hover {
+  height:75px;
+  width:175px;
+  background-image: linear-gradient(rgba(0, 0, 0, 0),rgba(193, 0, 0, 0.831));
+  font-size: 25px;
+  font-family: 'Bebas Neue';
+  cursor: pointer;
+}
+.trailer-button-hover div{
+  margin-top: 15px;
+  user-select: none;
+}
+
+.trailer-button div{
+  margin-top: 15px;
+  user-select: none;
+}
+
+.featured-bottom {
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+}
+
+.movies-header {
+  
+  margin-left: 40px;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.right-nav {
+  border: none;
+  background-color: black;
+  height: 40px;
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0px 5px;
+}
+
+.right-nav-hovered {
+  border: none;
+  background-color: rgb(228, 0, 0);
+  height: 40px;
+  color: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0px 5px;
+}
+
+a:link {
+  color: red;
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: bold;
+}
+
+/* visited link */
+a:visited {
+  color: rgb(255, 255, 255);
+}
+
+/* mouse over link */
+a:hover {
+  color: rgb(0, 0, 0);
+}
+
+/* selected link */
+a:active {
+  color: rgb(255, 255, 255);
+}
+
+.search-icon {
+  width: 30px;
+  opacity: .5;
+  margin-top: 10px;
+  margin-right: 20px;
+}
+.search-header {
+  margin-top: 20px;
+  margin-left: 40px;
+  display: flex;
+  justify-content: flex-start;
+}
+.search-bar {
+  background-color: black;
+  color: white;
+  border:none;
+  border-bottom: thin solid white;
+  font-size: 30px;
+  width: 600px;
+  margin-top: -5px;
+}
+
+.search-bar:focus {
+  outline: none;
+ 
+}
+
+#login-container {
+  background-color: black;
+  color: white;
+  height: 95.8%;
+  /* margin-top: -21px; */
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: column;
+  background-image: url("https://www.wallpaperup.com/uploads/wallpapers/2015/12/12/858387/4b8a92b93fc6b6a5a91175fdc7692d3c-1000.jpg");
+  overflow: hidden;
+}
+#login-container-black {
+  
+  content: "";
+  background-color: rgba(0, 0, 0, 0.762);
+  
+  position: absolute;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: column;
+  height: 95.8%;
+  width: 100%;
+  overflow: hidden;
+  color: white
+}
+
+#login-div {
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column;
+  align-items: flex-start;
+  /* background-color: black; */
+  color: white;
+  /* width: 400px; */
+  margin-top: 100px;
+  /* z-index: 2; */
+}
+
+.form-div {
+  /* background-color: white; */
+  width: 400px;
+}
+
+.input-box {
+  background-color: rgb(87, 87, 87);
+  /* padding: 10px; */
+  display:flex;
+  align-items: flex-start;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.form-input {
+  background-color: rgb(87, 87, 87);
+  border: none;
+  height: 40px;
+  font-size: 30px;
+  color: white;
+  padding: 10px;
+  width: 400px;
+}
+
+.form-input:focus {
+  outline: none;
+  background-color: rgb(87, 87, 87);
+}
+
+.sign-button {
+  width: 420px;
+  height: 50px;
+  background-color: red;
+  border:none;
+  color:white;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+#left-nav img {
+  height: 20px;
+  margin-left: 20px;
+}
+
+#search-container {
+  height: 95.8%;
+  background-color: rgb(0, 0, 0);
+  overflow: auto;
+  /* background-image: url("https://www.wallpaperup.com/uploads/wallpapers/2015/12/12/858387/4b8a92b93fc6b6a5a91175fdc7692d3c-1000.jpg"); */
+}
+.black-back {
+  widows: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.893);
+}
+#search-container::-webkit-scrollbar {
+  display: none;
+}
+
+.search-results {
+  margin-top: 20px;
+  height: 80%;
+  overflow: auto;
+}
+
+.search-results::-webkit-scrollbar {
+  background-color: rgba(255, 255, 255, 0.194);
+}
+
+.search-results::-webkit-scrollbar-thumb {
+  background: rgb(58, 58, 58);
+}
+
+.hero-fav{
+  width: 40px;
+  margin-left: 30px;
+  margin-top: 10px;
+ 
+  filter: drop-shadow(1px 1px 6px rgb(0, 0, 0));
+}
+
+.hero-play{
+  width: 100px;
+  height: 50px;
+  font-weight: bold;
+  font-size: 20px;
+  border-radius: 25;
+  
 }

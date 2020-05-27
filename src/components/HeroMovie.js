@@ -1,12 +1,25 @@
 import React, {useState, useEffect} from "react"
-// import "node_modules/video-react/dist/video-react.css"
+import TrailerButton from "../components/TrailerButton"
+
 import YouTube from "react-youtube"
+import {
+    Player,
+    ControlBar
+    // ReplayControl,
+    // ForwardControl,
+    // CurrentTimeDisplay,
+    // TimeDivider,
+    // PlaybackRateMenuButton,
+    // VolumeMenuButton
+  } from 'video-react'
 
 export default function HeroMovie(props){
    
     const [cast, setCast] = useState([]),
+        [trailers, setTrailers] = useState([]),
         [ytKey, setYtKey] = useState(""),
         [showTrailer, setShowTrailer] = useState(false),
+        [showMovie, setShowMovie] = useState(false),
         movie = props.movie,
         backdrop = `https://image.tmdb.org/t/p/original/${movie.backdrop_path}`,
         style = {backgroundImage: `url(${backdrop})`},
@@ -17,11 +30,15 @@ export default function HeroMovie(props){
             playerVars: {
               // https://developers.google.com/youtube/player_parameters
               autoplay: 1,
+              rel: 0,
+              modestbranding: 1,
             },
+            
           }
 
         useEffect(() => {
                 setShowTrailer(false)
+                setShowMovie(false)
                 fetch(`https://api.themoviedb.org/3/movie/${movie.tmdb_id}/credits?api_key=b94d0b3b408ccf74d9f49bb39a64a13b`)
                 .then(resp => resp.json())
                 .then(data => {
@@ -39,21 +56,24 @@ export default function HeroMovie(props){
                 .then(data => {
                     
                     const us = data.results.find(obj => obj.iso_3166_1 === "US")
-                    const certificationObj = us.release_dates.find(element => element.certification !== '')
-                    // console.log("is this it?", certificationObj)
+                    let certificationObj 
                     let certification
+                    us ?
+                    certificationObj = us.release_dates.find(element => element.certification !== ''):
+                    certification = ""
+                   
+                    
                    
                     certificationObj === undefined ? certification = "" : certification = certificationObj.certification
                     //if the certObj is null set cert to "" else continute with what we had
                     // certificationObj.certification errors if certificationOb is null
                     setCertification(certification)
-                    // console.log("cert:", certification)
                 })
                 
                 fetch(`https://api.themoviedb.org/3/movie/${movie.tmdb_id}/videos?api_key=b94d0b3b408ccf74d9f49bb39a64a13b&language=en-US`)
                 .then(resp => resp.json())
                 .then(data => {
-                    setYtKey(data.results[0].key)
+                    setTrailers(data.results)
                     //data comes back an as array.
                 })
              
@@ -64,10 +84,17 @@ export default function HeroMovie(props){
         // event.target.pauseVideo();
       }
 
-    function playTrailer(){
+    const playTrailer = (key) =>{
+        setYtKey(key)
         setShowTrailer(!showTrailer)
+        setShowMovie(false)
     }
-    console.log(props.userFavorites.filter(mov => mov.title === movie.title).length)
+
+    function playMovie(){
+        setShowTrailer(false)
+        setShowMovie(!showMovie)
+    }
+    
     return(
         <div className="featured-movie" style={style}>
             <div className="featured-top">
@@ -89,19 +116,41 @@ export default function HeroMovie(props){
                     <span className="genres"><p>Genres: {movie.genres.join(", ")}</p></span>
                     {/* if movie exists in user.favorites render remove fav else add fav. function logic handled in app.js */}
                     {/* {props.userFavorites.length > 0 ? null :  <button onClick={() => props.action(movie)}>add to favorites</button>} */}
+                    <button className="hero-play" onClick={() => playMovie()}>Play</button>
                     {props.userFavorites.filter(mov => mov.title === movie.title).length > 0 ?
-                     <button onClick={() => props.action(movie)}>remove from favorites</button>:
-                     <button onClick={() => props.action(movie)}>add to favorites</button> }
+                    <img onClick={() => props.action(movie)} className="hero-fav" src="http://localhost:3001/images/fav_green.png"/>:
+                     <img onClick={() => props.action(movie)} className="hero-fav" src="http://localhost:3001/images/fav_empty.png"/>}
+                     {/* <img onClick={() => props.action(movie)} className="hero-fav" src="http://localhost:3001/images/fav_empty.png"/> */}
                 </div>
                 <div className="featured-top-right">
                     {showTrailer ? <YouTube videoId={ytKey} opts={opts} onReady={_onReady} /> : null}
-                    
+                    {showMovie ? 
+                    <div style={{marginTop: "-50px", marginLeft: "-100px"}}>
+                        <Player 
+                        aspectRatio="16:9"
+                        fluid={false} width={640} 
+                        autoPlay={true}
+                        src={`http://localhost:3001/movies-files/${movie.tmdb_id}.m4v`}>
+                        <ControlBar autoHide={false}>
+                       
+                            {/* <ReplayControl seconds={10} order={1.1} />
+                            <ForwardControl seconds={30} order={1.2} />
+                            <CurrentTimeDisplay order={4.1} />
+                            <TimeDivider order={4.2} />
+                            <PlaybackRateMenuButton rates={[5, 2, 1, 0.5, 0.1]} order={7.1} />
+                            <VolumeMenuButton disabled />
+                         */}
+                        </ControlBar>
+                    </Player> 
+                    </div>: null}
                
                 </div> 
             </div>
             <div className="featured-bottom">
-                Things Go here like trailer buttons, favorite this, etc.
-                <button onClick={playTrailer}>Play Trailer</button>
+                
+                {trailers.slice(0,7).map((trailer, index) =>  <TrailerButton key={index} num={index+1} ytKey={trailer.key} func={playTrailer}/>
+                        
+                )}
             </div>
             
         </div>

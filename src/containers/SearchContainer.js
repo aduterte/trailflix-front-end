@@ -1,4 +1,6 @@
 import React, {Component} from "react"
+import Movie from "../components/Movie"
+import {Redirect} from "react-router-dom"
 
 export default class SearchContainer extends Component {
     constructor () {
@@ -31,40 +33,11 @@ export default class SearchContainer extends Component {
             // this.setState({
             //     results: data.results
             // })
-            this.dbConvertor(data.results)
+            // this.dbConvertor(data.results)
+            this.props.dbConvertor(data.results, "search")
         })
     }
-    
-    createMovie = (movie) => {
-            const genres = movie.genres.map(genre => genre.name)
-            
-           const obj = {
-                        title: movie.title,
-                        genres: genres,
-                        backdrop_path: movie.backdrop_path,
-                        adult: movie.adult,
-                        imdb_id: movie.imdb_id,
-                        overview: movie.overview,
-                        poster_path: movie.poster_path,
-                        release_date: movie.release_date,
-                        runtime: movie.runtime,
-                        tagline: movie.tagline,
-                        original_language: movie.original_language,
-                        tmdb_id: movie.id
-                    }
-                    console.log(obj)
-                if(!obj.poster_path || !obj.backdrop_path || !obj.release_date){
 
-                } else {     
-                fetch("http://localhost:3000/movies", {
-                    method: "POST",
-                    headers : {'Content-Type': 'application/json'},
-                    body: JSON.stringify(obj)
-                }).then(resp => resp.json())
-                .then(movie => this.setState({results: [...this.state.results, movie]}))
-                }
-    }
-    
     componentDidMount() {
         
         this.setState({
@@ -72,45 +45,40 @@ export default class SearchContainer extends Component {
         })
     }
 
-    dbConvertor = (results) => {
-        
-        results.forEach(movie =>  {
-                console.log(movie.id)
-                if(this.props.ourDb.filter(e => +e.tmdb_id  === movie.id).length > 0){
-                        // find movie in our db, add to results state
-                        // let ourDbMovie = this.props.ourDb.filter(e => +e.tmdb_id  === movie.id)
-                        // console.log(ourDbMovie[0])
-                        // this.setState({results: [...this.state.results, ourDbMovie[0]]})
-                    // console.log(this.state.results)
-                } else {
-                    
-                    fetch(`https://api.themoviedb.org/3/movie/${movie.id}?api_key=b94d0b3b408ccf74d9f49bb39a64a13b&language=en-US`)
-                    .then(resp => resp.json())
-                    .then(movie => this.createMovie(movie))
-                   
-                }
-            
-
-            
-        })
+    componentDidUpdate(prevProps){
+        if (prevProps.ourDb.length !== this.props.ourDb.length){
+            this.setState({results: this.props.ourDb})
+        }
+    }
+    handleMovieClick = (movie) => {
+        document.getElementById("movie-container").scrollTop = 0
+        return <Redirect to={`/movies/${movie.id}`}/>  
     }
 
-    
-
-
-
     render(){
-        console.log(this.props.ourDb)
-        console.log("filtered",this.state.results)
+        
         return (
-            <div>
-                <form onSubmit={this.handleSubmit}>
-                <input placeholder="Search..." type="text" name="searchTerm" value={this.state.searchTerm} onChange={this.handleChange}/>
-                </form>
-                <div>
-                    {this.filterMovies().map((x, i) => <div>{i}.{x.title}</div>)}
-                {/* (movie => <Movie title="movie-container" key={movie.id} movie={movie} removeFavorite={props.removeFavorite} action={handleMovieClick}/>) */}
+            <div id="search-container">
+                
+                <div className="search-header">
+                    <form onSubmit={this.handleSubmit}>
+                    <img className="search-icon" src="https://svg-clipart.com/svg/icon/nQy8yy4-search-icon-white-one-vector.svg"/>
+                    <input className="search-bar" placeholder="Search..." type="text" name="searchTerm" value={this.state.searchTerm} onChange={this.handleChange}/>
+                    </form>
+                </div>
+                <div className="search-results">
+                    <div  className="flex-grid">
+                        {this.filterMovies().map(movie => 
+                        <Movie 
+                        title="movie-container" 
+                        key={movie.id} 
+                        movie={movie} 
+                        removeFavorite={this.props.removeFavorite} 
+                        action={this.handleMovieClick}
+                        favs={this.props.userFavorites}/>)}
+                    {/* (movie => <Movie title="movie-container" key={movie.id} movie={movie} removeFavorite={props.removeFavorite} action={handleMovieClick}/>) */}
 
+                    </div>
                 </div>
             </div>
         )

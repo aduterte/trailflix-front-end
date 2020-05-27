@@ -1,12 +1,12 @@
 import React, {useState} from "react"
 import Movie from "../components/Movie"
 import HeroMovie from "../components/HeroMovie"
-import {Link, Redirect} from "react-router-dom"
+import {Redirect} from "react-router-dom"
 
 
 export default function MovieContainer(props){
     
-    const [currentMovie, setCurrentMovie] = useState(props.rndMov)
+    const [currentMovie] = useState(props.rndMov)
 
     
     function handleMovieClick(movie) {
@@ -19,8 +19,9 @@ export default function MovieContainer(props){
             <div>
                 <HeroMovie userFavorites={props.userFavorites} movie={currentMovie} action={props.action}/>
             </div>
+            <div className="movies-header"> <h1 style={{color: "white"}}>All Movies</h1></div>
             <div className="flex-grid">
-                {props.movies.map(movie => <Movie title="movie-container" key={movie.id} movie={movie} removeFavorite={props.removeFavorite} action={handleMovieClick}/>)}
+                {props.movies.map(movie => <Movie title="movie-container" favs={props.userFavorites} key={movie.id} movie={movie} handleFavorite={props.action} action={handleMovieClick}/>)}
             </div>
         </div>
     )

@@ -12,6 +12,8 @@ import {
 import Profile from './components/Profile'
 import ShowMovieContainer from './containers/ShowMovieContainer';
 import SearchContainer from './containers/SearchContainer';
+import "../node_modules/video-react/dist/video-react.css"
+
 // api key: b94d0b3b408ccf74d9f49bb39a64a13b 
 
 class App extends React.Component {
@@ -21,8 +23,10 @@ class App extends React.Component {
     loggedIn: false,
     user: null,
     randomMovie: {},
-    userFavorites: []
+    userFavorites: [],
+    similarMovies: [],
   }
+
   componentDidMount(){
     fetch('http://localhost:3000/movies')
     .then(resp => resp.json())
@@ -32,20 +36,39 @@ class App extends React.Component {
       this.setState({randomMovie: randomMovie})
       this.setState({movies: data})
     })
+
+    if(localStorage.getItem("token")){
+      fetch("http://localhost:3000/login", {
+        headers: {
+          "Authenticate": localStorage.token
+        }
+      })
+      .then(res => res.json())
+    .then(user=> {
+        
+        this.handleLogin(user)
+        //if error, don't update the state
+      })
+    }else{
+      console.log("No token found, user is not authenticated")
+    }
     
     
   }
 
   handleLogin = (user) => {
-    console.log(user)
+    
     this.setState({
       user: user,
       userFavorites: user.movies
     })
   }
 
-  func = () => {
-    console.log("Movie in Profile has been clicked")
+  handleLogout = (user) => {
+    this.setState({
+      user: null
+    })
+    localStorage.removeItem("token")
   }
 
   addFavorite = (movie) => {
@@ -95,13 +118,65 @@ class App extends React.Component {
     })
   }
 
+  dbConvertor = (results, comp) => {
+    this.setState({similarMovies: []})    
+    results.forEach(movie =>  {
+          
+            if(this.state.movies.filter(e => +e.tmdb_id  === movie.id).length > 0){
+               if(comp === "show"){
+                 let similar = this.state.movies.find(e => +e.tmdb_id  === movie.id)
+                 this.setState({similarMovies: [...this.state.similarMovies, similar]})
+               }
+            } else {
+                
+                fetch(`https://api.themoviedb.org/3/movie/${movie.id}?api_key=b94d0b3b408ccf74d9f49bb39a64a13b&language=en-US`)
+                .then(resp => resp.json())
+                .then(movie => this.createMovie(movie, comp))
+               
+            }  
+    })
+}
+
+createMovie = (movie, comp) => {
+  
+      if(!movie.poster_path || !movie.backdrop_path || !movie.release_date){
+
+      } else {     
+        const genres = movie.genres.map(genre => genre.name)
+  
+        const obj = {
+              title: movie.title,
+              genres: genres,
+              backdrop_path: movie.backdrop_path,
+              adult: movie.adult,
+              imdb_id: movie.imdb_id,
+              overview: movie.overview,
+              poster_path: movie.poster_path,
+              release_date: movie.release_date,
+              runtime: movie.runtime,
+              tagline: movie.tagline,
+              original_language: movie.original_language,
+              tmdb_id: movie.id
+          }
+         
+      fetch("http://localhost:3000/movies", {
+          method: "POST",
+          headers : {'Content-Type': 'application/json'},
+          body: JSON.stringify(obj)
+      }).then(resp => resp.json())
+      .then(movie => {
+        this.setState({movies: [...this.state.movies, movie]})
+        comp === "show" && this.setState({similarMovies: [...this.state.similarMovies, movie]})
+      })
+      }
+}
 
   render(){
     
     return (
       <Router>
       <div className="App">
-        <Nav user={this.state.user}/>
+        <Nav user={this.state.user} handleLogout={this.handleLogout}/>
         <Switch>
           
           <Route exact path="/movies">
@@ -117,19 +192,26 @@ class App extends React.Component {
             this.state.user ? <Redirect to="/profile"/> : <LoginContainer handleLogin={this.handleLogin}/>  
             ) } />
           <Route path='/profile'>
-            {this.state.user ? <Profile user={this.state.user} favorites={this.state.userFavorites} removeFavorite={this.removeFavorite}/> : <Redirect to="/login" /> }
+            {this.state.user ? <Profile user={this.state.user} favorites={this.state.userFavorites} action={this.handleFavorite}/> : <Redirect to="/login" /> }
           </Route>
           <Route exact path="/movies/:id" render={
             (routerProps) => {
               let id = routerProps.match.params.id
-              let movie = this.state.movies.find(movie => movie.id == id)
-              return this.state.user ? <ShowMovieContainer userFavorites={this.state.userFavorites} action={this.handleFavorite} movies={this.state.movies} movie={movie}/> :
+              let movie = this.state.movies.find(movie => +movie.id === +id)
+              return this.state.user ? 
+              <ShowMovieContainer 
+              userFavorites={this.state.userFavorites} 
+              action={this.handleFavorite} 
+              movies={this.state.movies} 
+              movie={movie}
+              dbConvertor={this.dbConvertor}
+              similarMovies={this.state.similarMovies}/> :
               <Redirect to="/login" />
             }
           }
           />
            <Route path='/search'>
-            <SearchContainer ourDb={this.state.movies}/> 
+            <SearchContainer ourDb={this.state.movies} dbConvertor={this.dbConvertor} userFavorites={this.state.userFavorites}/> 
            </Route>
         </Switch>
       </div>
