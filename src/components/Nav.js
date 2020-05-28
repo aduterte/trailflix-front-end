@@ -11,7 +11,7 @@ export default function Nav (props) {
         <div id="top-nav">
             <div id="left-nav">
                 <Link to="/">
-                <img src="http://localhost:3001/images/smalllogo.svg"/>
+                <img alt="Trailflix Logo" src="http://localhost:3001/images/smalllogo.svg"/>
                 </Link>
             </div>
             <div id="right-nav">

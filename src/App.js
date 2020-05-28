@@ -59,9 +59,13 @@ class App extends React.Component {
   handleLogin = (user) => {
     
     this.setState({
-      user: user,
-      userFavorites: user.movies
+      user: user
+      
     })
+
+    if(user.movies){
+      this.setState({userFavorites: user.movies})
+    }
   }
 
   handleLogout = (user) => {
@@ -211,7 +215,7 @@ createMovie = (movie, comp) => {
           }
           />
            <Route path='/search'>
-            <SearchContainer ourDb={this.state.movies} dbConvertor={this.dbConvertor} userFavorites={this.state.userFavorites}/> 
+            <SearchContainer ourDb={this.state.movies} dbConvertor={this.dbConvertor} action={this.handleFavorite} userFavorites={this.state.userFavorites}/> 
            </Route>
         </Switch>
       </div>

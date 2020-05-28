@@ -62,8 +62,9 @@ export default class SearchContainer extends Component {
                 
                 <div className="search-header">
                     <form onSubmit={this.handleSubmit}>
-                    <img className="search-icon" src="https://svg-clipart.com/svg/icon/nQy8yy4-search-icon-white-one-vector.svg"/>
+                    <img alt="" className="search-icon" src="https://svg-clipart.com/svg/icon/nQy8yy4-search-icon-white-one-vector.svg"/>
                     <input className="search-bar" placeholder="Search..." type="text" name="searchTerm" value={this.state.searchTerm} onChange={this.handleChange}/>
+                    <input className="search-submit" type="submit" value="Search"/>
                     </form>
                 </div>
                 <div className="search-results">
@@ -73,7 +74,7 @@ export default class SearchContainer extends Component {
                         title="movie-container" 
                         key={movie.id} 
                         movie={movie} 
-                        removeFavorite={this.props.removeFavorite} 
+                        handleFavorite={this.props.action} 
                         action={this.handleMovieClick}
                         favs={this.props.userFavorites}/>)}
                     {/* (movie => <Movie title="movie-container" key={movie.id} movie={movie} removeFavorite={props.removeFavorite} action={handleMovieClick}/>) */}

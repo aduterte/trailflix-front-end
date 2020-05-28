@@ -35,8 +35,12 @@ class Form extends Component  {
             body: JSON.stringify(user)
         }).then(resp => resp.json())
         .then(data =>{
-            localStorage.setItem("token", data.token)
-            this.props.handleLogin(data.user)
+            if(!data.user){
+                alert("Username or Password are incorrect")
+            } else {
+                localStorage.setItem("token", data.token)
+                this.props.handleLogin(data.user)
+            }
         })
         // .then(data => this.props.handleLogin(data))
     }
@@ -58,9 +62,15 @@ class Form extends Component  {
             body: JSON.stringify(user)
         }).then(resp => resp.json())
         .then(data => {
-            data.id == null ? 
-            this.setState({errors: data}):
-            this.props.handleLogin(data)
+            // data.id == null ? 
+            // this.setState({errors: data}):
+            // this.props.handleLogin(data)
+            if(!data.user){
+                this.setState({errors: data})
+            } else {
+                localStorage.setItem("token", data.token)
+                this.props.handleLogin(data.user)
+            }
         })
     }
 
@@ -73,7 +83,7 @@ class Form extends Component  {
         
         return(
             <div className="form-div">
-                
+
                 <h1>Sign In</h1>
                 <form onSubmit={!this.state.newUser ? this.handleLogin : this.handleSingup}>
                     
@@ -82,17 +92,17 @@ class Form extends Component  {
                         <input className="form-input" name="name" placeholder="Enter Name" value={this.state.name} onChange={this.handleOnChange} />
                     </div>}
                     
-                    <div div className="input-box">
+                    <div className="input-box">
                         <input className="form-input" name="userEmail" value={this.state.userEmail} placeholder="Enter Email" onChange={this.handleOnChange}/>
                     </div>
                     
-                    <div div className="input-box">
+                    <div className="input-box">
                         <input className="form-input" name="userPassword" value={this.state.userPassword} type="password" placeholder="Enter Password" onChange={this.handleOnChange}/>
                     </div>
 
                     {this.state.newUser &&  
                     <div className="input-box">
-                    <input className="form-input" name="userPassword" name="passConfirm" placeholder="Confirm Password" type="password" value={this.state.passConfirm} onChange={this.handleOnChange}/> 
+                    <input className="form-input"  name="passConfirm" placeholder="Confirm Password" type="password" value={this.state.passConfirm} onChange={this.handleOnChange}/> 
                     </div>}
                     <div>
                     <button className="sign-button">{this.state.newUser ? "Sign Up" : "Log In"}</button>

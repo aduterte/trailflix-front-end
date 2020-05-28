@@ -394,3 +394,15 @@ a:active {
   border-radius: 25;
   
 }
+
+.search-submit {
+  width: 90px;
+  height: 25px;
+  background-color: rgb(108, 14, 14);
+  border: none;
+  color: rgba(255, 255, 255, 0.89);
+  font-weight: 900;
+  font-size: 20px;
+  margin-left: 30px;
+  border-radius: 5px;
+}

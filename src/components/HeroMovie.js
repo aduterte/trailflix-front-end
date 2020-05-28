@@ -118,8 +118,8 @@ export default function HeroMovie(props){
                     {/* {props.userFavorites.length > 0 ? null :  <button onClick={() => props.action(movie)}>add to favorites</button>} */}
                     <button className="hero-play" onClick={() => playMovie()}>Play</button>
                     {props.userFavorites.filter(mov => mov.title === movie.title).length > 0 ?
-                    <img onClick={() => props.action(movie)} className="hero-fav" src="http://localhost:3001/images/fav_green.png"/>:
-                     <img onClick={() => props.action(movie)} className="hero-fav" src="http://localhost:3001/images/fav_empty.png"/>}
+                    <img alt="fav-icon" onClick={() => props.action(movie)} className="hero-fav" src="http://localhost:3001/images/fav_green.png"/>:
+                     <img alt="fav-icon" onClick={() => props.action(movie)} className="hero-fav" src="http://localhost:3001/images/fav_empty.png"/>}
                      {/* <img onClick={() => props.action(movie)} className="hero-fav" src="http://localhost:3001/images/fav_empty.png"/> */}
                 </div>
                 <div className="featured-top-right">
