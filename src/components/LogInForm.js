@@ -83,8 +83,9 @@ class Form extends Component  {
         
         return(
             <div className="form-div">
-
-                <h1>Sign In</h1>
+                {!this.state.newUser ? 
+                <h1>Log In</h1>:
+                <h1>Sign Up</h1>}
                 <form onSubmit={!this.state.newUser ? this.handleLogin : this.handleSingup}>
                     
                     {this.state.newUser &&  
