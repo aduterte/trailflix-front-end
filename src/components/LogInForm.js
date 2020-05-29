@@ -29,7 +29,7 @@ class Form extends Component  {
             password: this.state.userPassword
         }
         e.target.reset()
-        fetch("http://localhost:3000/login", {
+        fetch("https://young-meadow-44827.herokuapp.com/login", {
             method: "POST",
             headers: {"Content-Type" : "application/json", "Accept" : "application/json"},
             body: JSON.stringify(user)
@@ -56,7 +56,7 @@ class Form extends Component  {
             password: this.state.userPassword,
             password_confirmation: this.state.passConfirm
         }
-        fetch("http://localhost:3000/users", {
+        fetch("https://young-meadow-44827.herokuapp.com/users", {
             method: "POST",
             headers: { "Content-Type": "application/json"},
             body: JSON.stringify(user)

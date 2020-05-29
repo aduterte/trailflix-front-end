@@ -28,7 +28,7 @@ class App extends React.Component {
   }
 
   componentDidMount(){
-    fetch('http://localhost:3000/movies')
+    fetch('https://young-meadow-44827.herokuapp.com/movies')
     .then(resp => resp.json())
     .then(data => {
       const random = [Math.floor(Math.random() * data.length)],
@@ -38,7 +38,7 @@ class App extends React.Component {
     })
 
     if(localStorage.getItem("token")){
-      fetch("http://localhost:3000/login", {
+      fetch("https://young-meadow-44827.herokuapp.com/login", {
         headers: {
           "Authenticate": localStorage.token
         }
@@ -82,7 +82,7 @@ class App extends React.Component {
       user_id: this.state.user.id
     }
     
-    fetch("http://localhost:3000/favorites", {
+    fetch("https://young-meadow-44827.herokuapp.com/favorites", {
       method: "POST",
       headers: {"Content-Type": 'application/json'},
       body: JSON.stringify(obj)
@@ -111,7 +111,7 @@ class App extends React.Component {
       movie_id: movie.id,
       user_id: this.state.user.id
     }
-    fetch(`http://localhost:3000/favorites`, {
+    fetch(`https://young-meadow-44827.herokuapp.com/favorites`, {
       method: "DELETE",
       headers: {"Content-Type": 'application/json'},
       body: JSON.stringify(obj)
@@ -163,7 +163,7 @@ createMovie = (movie, comp) => {
               tmdb_id: movie.id
           }
          
-      fetch("http://localhost:3000/movies", {
+      fetch("https://young-meadow-44827.herokuapp.com/movies", {
           method: "POST",
           headers : {'Content-Type': 'application/json'},
           body: JSON.stringify(obj)

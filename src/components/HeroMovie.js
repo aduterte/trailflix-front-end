@@ -87,13 +87,13 @@ export default function HeroMovie(props){
     const playTrailer = (key) =>{
         setYtKey(key)
         setShowTrailer(!showTrailer)
-        setShowMovie(false)
+        // setShowMovie(false)
     }
 
-    function playMovie(){
-        setShowTrailer(false)
-        setShowMovie(!showMovie)
-    }
+    // function playMovie(){
+    //     setShowTrailer(false)
+    //     setShowMovie(!showMovie)
+    // }
     
     return(
         <div className="featured-movie" style={style}>
@@ -116,33 +116,33 @@ export default function HeroMovie(props){
                     <span className="genres"><p>Genres: {movie.genres.join(", ")}</p></span>
                     {/* if movie exists in user.favorites render remove fav else add fav. function logic handled in app.js */}
                     {/* {props.userFavorites.length > 0 ? null :  <button onClick={() => props.action(movie)}>add to favorites</button>} */}
-                    <button className="hero-play" onClick={() => playMovie()}>Play</button>
+                    {/* <button className="hero-play" onClick={() => playMovie()}>Play</button> */}
                     {props.userFavorites.filter(mov => mov.title === movie.title).length > 0 ?
-                    <img alt="fav-icon" onClick={() => props.action(movie)} className="hero-fav" src="http://localhost:3001/images/fav_green.png"/>:
-                     <img alt="fav-icon" onClick={() => props.action(movie)} className="hero-fav" src="http://localhost:3001/images/fav_empty.png"/>}
+                    <img alt="fav-icon" onClick={() => props.action(movie)} className="hero-fav" src="/images/fav_green.png"/>:
+                     <img alt="fav-icon" onClick={() => props.action(movie)} className="hero-fav" src="/images/fav_empty.png"/>}
                      {/* <img onClick={() => props.action(movie)} className="hero-fav" src="http://localhost:3001/images/fav_empty.png"/> */}
                 </div>
                 <div className="featured-top-right">
                     {showTrailer ? <YouTube videoId={ytKey} opts={opts} onReady={_onReady} /> : null}
-                    {showMovie ? 
+                    {/* {showMovie ? 
                     <div style={{marginTop: "-50px", marginLeft: "-100px"}}>
                         <Player 
                         aspectRatio="16:9"
                         fluid={false} width={640} 
                         autoPlay={true}
                         src={`http://localhost:3001/movies-files/${movie.tmdb_id}.m4v`}>
-                        <ControlBar autoHide={false}>
+                        <ControlBar autoHide={false}> 
                        
-                            {/* <ReplayControl seconds={10} order={1.1} />
+                             <ReplayControl seconds={10} order={1.1} />
                             <ForwardControl seconds={30} order={1.2} />
                             <CurrentTimeDisplay order={4.1} />
                             <TimeDivider order={4.2} />
                             <PlaybackRateMenuButton rates={[5, 2, 1, 0.5, 0.1]} order={7.1} />
                             <VolumeMenuButton disabled />
-                         */}
+                        
                         </ControlBar>
                     </Player> 
-                    </div>: null}
+                    </div>: null} */}
                
                 </div> 
             </div>

@@ -11,7 +11,7 @@ export default class LoginContainer extends React.Component {
             <div id="login-container-black">
                 <div id="login-div">
                 
-                    <img alt="Trailflix Logo" src="http://localhost:3001/images/biglogo.svg"/>
+                    <img alt="Trailflix Logo" src="/images/biglogo.svg"/>
                     <LogInForm handleLogin={this.props.handleLogin}/>
                 </div>
             </div>
