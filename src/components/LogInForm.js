@@ -40,6 +40,7 @@ class Form extends Component  {
             } else {
                 localStorage.setItem("token", data.token)
                 this.props.handleLogin(data.user)
+                console.log(data.user)
             }
         })
         // .then(data => this.props.handleLogin(data))

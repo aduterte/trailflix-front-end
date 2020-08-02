@@ -92,7 +92,7 @@ class App extends React.Component {
         userFavorites: [...this.state.userFavorites, movie]
       })
     } )
-    // if movie doesn't exist in user.favorite, do fetch post. else do fetch delete
+    
   }
 
   handleFavorite = (movie) => {

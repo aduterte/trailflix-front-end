@@ -5,12 +5,6 @@ import YouTube from "react-youtube"
 import {
     Player,
     ControlBar
-    // ReplayControl,
-    // ForwardControl,
-    // CurrentTimeDisplay,
-    // TimeDivider,
-    // PlaybackRateMenuButton,
-    // VolumeMenuButton
   } from 'video-react'
 
 export default function HeroMovie(props){
@@ -65,8 +59,7 @@ export default function HeroMovie(props){
                     
                    
                     certificationObj === undefined ? certification = "" : certification = certificationObj.certification
-                    //if the certObj is null set cert to "" else continute with what we had
-                    // certificationObj.certification errors if certificationOb is null
+                  
                     setCertification(certification)
                 })
                 
@@ -74,7 +67,7 @@ export default function HeroMovie(props){
                 .then(resp => resp.json())
                 .then(data => {
                     setTrailers(data.results)
-                    //data comes back an as array.
+                 
                 })
              
     }, [movie.tmdb_id])   
